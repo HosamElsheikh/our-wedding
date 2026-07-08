@@ -1,0 +1,7 @@
+Place your licensed music file in this folder, named exactly:
+
+    music.mp3
+
+(so the full path is assets/audio/music.mp3)
+
+You can delete this placeholder file afterwards.
