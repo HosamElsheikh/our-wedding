@@ -1,2 +1,6 @@
 # Local tooling (not needed for the site)
 .claude/
+
+# Stock-asset source files (license: don't redistribute; only the
+# processed assets/seal.png ships with the site)
+assets/red-wax-seals-set-letter-envelope/

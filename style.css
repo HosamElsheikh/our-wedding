@@ -83,6 +83,17 @@ body.env-locked { overflow: hidden; }
   transition: transform .95s cubic-bezier(.55, 0, .6, 1) .12s;
   will-change: transform;
 }
+/* subtle paper grain so the envelope reads as textured stock */
+.env-half::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 240px 240px;
+  opacity: .08;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
 /* Portrait (mobile): diagonal split, top piece + bottom piece */
 .env-half-a {
   background:
@@ -120,28 +131,39 @@ body.env-locked { overflow: hidden; }
 }
 html[lang="ar"] .envelope-title { font-family: var(--font-ar-head); }
 
-/* Wax seal on the split line */
+/* Wax seal, centered on the visual split line (the geometric split
+   plus half the white card sliver, which is 2.5% wide) */
 .env-seal {
   position: absolute;
-  top: 50%;
+  top: 51.25%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 3;
-  width: 88px;
-  height: 88px;
-  border-radius: 46% 54% 52% 48% / 53% 47% 55% 45%;
-  background: radial-gradient(circle at 36% 30%, var(--coral), #b96a76 68%, #a95c68);
-  box-shadow:
-    0 4px 16px rgba(146, 84, 93, .5),
-    inset 0 -3px 8px rgba(0, 0, 0, .15),
-    inset 0 3px 6px rgba(255, 255, 255, .25);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 132px;
+  height: 132px;
   transition: opacity .35s, transform .35s;
   animation: seal-pulse 2.4s ease-in-out infinite;
 }
-.env-seal svg { width: 58px; height: 44px; }
+/* photo cutout recolored from red to the site's rose pink */
+.env-seal img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter:
+    brightness(1.55) saturate(.45) hue-rotate(-6deg)
+    drop-shadow(0 6px 14px rgba(146, 84, 93, .45));
+}
+/* embossed stamp design over the wax dish */
+.env-seal-stamp {
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 58%;
+  height: 58%;
+  color: rgba(255, 238, 240, .78);
+  filter: drop-shadow(0 1px 0 rgba(94, 44, 58, .55));
+}
 .envelope-full.open .env-seal {
   opacity: 0;
   transform: translate(-50%, -50%) scale(1.3);
@@ -185,6 +207,7 @@ html[lang="ar"] .envelope-title { font-family: var(--font-ar-head); }
     clip-path: polygon(42% 0, 100% 0, 100% 100%, 58% 100%);
   }
   .env-lip { clip-path: polygon(42% 0, 44.5% 0, 60.5% 100%, 58% 100%); }
+  .env-seal { top: 50%; left: 51.25%; width: 150px; height: 150px; }
   .envelope-full.open .env-half-a { transform: translate3d(-115%, 7%, 0); }
   .envelope-full.open .env-half-b { transform: translate3d(115%, -7%, 0); }
   /* keep the texts on their own half: title on the dark left piece,
