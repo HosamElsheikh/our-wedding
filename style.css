@@ -31,7 +31,9 @@
 html { scroll-behavior: smooth; }
 
 body {
-  background: var(--ivory);
+  /* ivory with a faint stationery grain */
+  background-color: var(--ivory);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.06'/%3E%3C/svg%3E");
   color: var(--ink);
   font-family: var(--font-en-body);
   line-height: 1.7;
@@ -83,16 +85,16 @@ body.env-locked { overflow: hidden; }
   transition: transform .95s cubic-bezier(.55, 0, .6, 1) .12s;
   will-change: transform;
 }
-/* paper texture, two layers:
+/* linen paper texture, two layers:
    ::before — large cloudy mottling (uneven paper tone)
-   ::after  — fine fiber grain */
+   ::after  — woven crosshatch (linen threads) + fine fiber grain */
 .env-half::before {
   content: "";
   position: absolute;
   inset: 0;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.011' numOctaves='4' seed='11' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E");
   background-size: 600px 600px;
-  opacity: .45;
+  opacity: .5;
   mix-blend-mode: soft-light;
   pointer-events: none;
 }
@@ -100,35 +102,36 @@ body.env-locked { overflow: hidden; }
   content: "";
   position: absolute;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 240px 240px;
-  opacity: .14;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.22' numOctaves='2' seed='8' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
+  background-size: 240px 240px, 420px 420px;
+  opacity: .3;
   mix-blend-mode: multiply;
   pointer-events: none;
 }
 /* Portrait (mobile): diagonal split, top piece + bottom piece */
+/* Envelope back, like a real folded envelope:
+   half-a = the triangular flap lying ON TOP, casting a shadow
+   half-b = the envelope body with creases radiating from the center.
+   The body has a notch cut where the flap sits (with a small overlap
+   band along the edge), so the moment the two pieces start separating
+   the invitation page shows through the gap — not more envelope.
+   Default layout (web/tablet): flap on top, opens VERTICALLY. */
 .env-half-a {
-  background:
-    linear-gradient(115deg, transparent 49.6%, rgba(255, 255, 255, .14) 50%, transparent 50.6%),
-    linear-gradient(170deg, #d494a0, #cd8492);
-  clip-path: polygon(0 0, 100% 0, 100% 42%, 0 58%);
+  background: linear-gradient(180deg, #dfa8b2, #d795a1);
+  clip-path: polygon(0 0, 100% 0, 50% 52%);
+  filter: drop-shadow(0 10px 18px rgba(122, 62, 74, .45));
 }
 .env-half-b {
   background:
-    linear-gradient(105deg, transparent 49.6%, rgba(146, 84, 93, .12) 50%, transparent 50.5%),
-    linear-gradient(160deg, #f5d5da, #efc8cd);
-  clip-path: polygon(0 58%, 100% 42%, 100% 100%, 0 100%);
+    linear-gradient(63deg,  transparent 49.5%, rgba(122, 62, 74, .22) 49.9%, rgba(255, 255, 255, .3) 50.15%, transparent 50.6%),
+    linear-gradient(-63deg, transparent 49.5%, rgba(122, 62, 74, .22) 49.9%, rgba(255, 255, 255, .3) 50.15%, transparent 50.6%),
+    linear-gradient(165deg, #f0cad0, #e9bec5);
+  clip-path: polygon(0 0, 50% 46%, 100% 0, 100% 100%, 0 100%);
 }
-/* white card sliver peeking along the split */
-.env-lip {
-  position: absolute;
-  inset: 0;
-  display: block;
-  background: var(--white);
-  clip-path: polygon(0 58%, 100% 42%, 100% 44.5%, 0 60.5%);
-}
-.envelope-full.open .env-half-a { transform: translate3d(7%, -115%, 0); }
-.envelope-full.open .env-half-b { transform: translate3d(-7%, 115%, 0); }
+.envelope-full.open .env-half-a { transform: translate3d(0, -114%, 0); }
+.envelope-full.open .env-half-b { transform: translate3d(0, 114%, 0); }
 
 .envelope-title {
   position: absolute;
@@ -136,18 +139,19 @@ body.env-locked { overflow: hidden; }
   left: 0;
   right: 0;
   text-align: center;
-  color: var(--white);
+  color: var(--rose-deep);
   font-family: var(--font-en-head);
   font-size: clamp(1.9rem, 7vw, 2.6rem);
-  text-shadow: 0 1px 6px rgba(146, 84, 93, .35);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, .35);
+  transition: opacity .3s;
 }
+.envelope-full.open .envelope-title { opacity: 0; }
 html[lang="ar"] .envelope-title { font-family: var(--font-ar-head); }
 
-/* Wax seal, centered on the visual split line (the geometric split
-   plus half the white card sliver, which is 2.5% wide) */
+/* Wax seal on the flap tip */
 .env-seal {
   position: absolute;
-  top: 51.25%;
+  top: 52%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 3;
@@ -204,28 +208,26 @@ html[lang="ar"] .envelope-title { font-family: var(--font-ar-head); }
   50%      { opacity: 1; }
 }
 
-/* Landscape / desktop: split left/right instead of top/bottom */
-@media (orientation: landscape) {
+/* Phones: flap on the side, opens HORIZONTALLY */
+@media (max-width: 640px) {
   .env-half-a {
-    background:
-      linear-gradient(25deg, transparent 49.6%, rgba(255, 255, 255, .14) 50%, transparent 50.6%),
-      linear-gradient(100deg, #d494a0, #cd8492);
-    clip-path: polygon(0 0, 42% 0, 58% 100%, 0 100%);
+    background: linear-gradient(90deg, #dfa8b2, #d795a1);
+    clip-path: polygon(0 0, 55% 50%, 0 100%);
+    filter: drop-shadow(12px 0 18px rgba(122, 62, 74, .45));
   }
   .env-half-b {
     background:
-      linear-gradient(15deg, transparent 49.6%, rgba(146, 84, 93, .12) 50%, transparent 50.5%),
-      linear-gradient(250deg, #f5d5da, #efc8cd);
-    clip-path: polygon(42% 0, 100% 0, 100% 100%, 58% 100%);
+      linear-gradient(27deg,  transparent 49.5%, rgba(122, 62, 74, .22) 49.9%, rgba(255, 255, 255, .3) 50.15%, transparent 50.6%),
+      linear-gradient(-27deg, transparent 49.5%, rgba(122, 62, 74, .22) 49.9%, rgba(255, 255, 255, .3) 50.15%, transparent 50.6%),
+      linear-gradient(255deg, #f0cad0, #e9bec5);
+    clip-path: polygon(0 0, 49% 50%, 0 100%, 100% 100%, 100% 0);
   }
-  .env-lip { clip-path: polygon(42% 0, 44.5% 0, 60.5% 100%, 58% 100%); }
-  .env-seal { top: 50%; left: 51.25%; width: 150px; height: 150px; }
-  .envelope-full.open .env-half-a { transform: translate3d(-115%, 7%, 0); }
-  .envelope-full.open .env-half-b { transform: translate3d(115%, -7%, 0); }
-  /* keep the texts on their own half: title on the dark left piece,
-     hint on the light right piece */
-  .envelope-title { top: 10%; left: 4%; right: 58%; }
-  .envelope-hint  { bottom: 8%; left: 58%; right: 4%; }
+  .env-seal { top: 50%; left: 55%; }
+  .envelope-full.open .env-half-a { transform: translate3d(-114%, 0, 0); }
+  .envelope-full.open .env-half-b { transform: translate3d(114%, 0, 0); }
+  /* keep the texts clear of the side flap */
+  .envelope-title { top: 8%; left: 18%; right: 4%; }
+  .envelope-hint  { bottom: 7%; left: 18%; right: 4%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -289,6 +291,7 @@ html[lang="ar"] .envelope-title { font-family: var(--font-ar-head); }
   text-align: center;
   padding: 5rem 1.5rem;
   background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.06'/%3E%3C/svg%3E"),
     radial-gradient(ellipse at 20% 10%, var(--blush-soft) 0%, transparent 55%),
     radial-gradient(ellipse at 85% 90%, var(--blush) 0%, transparent 50%),
     linear-gradient(180deg, var(--white) 0%, var(--ivory) 100%);
