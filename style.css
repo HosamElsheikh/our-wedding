@@ -17,10 +17,10 @@
   --ink-soft:   #8a747a;
   --line:       #eddadb;
 
-  --font-en-head: "Dancing Script", "Segoe Script", cursive;
+  --font-en-head: "Great Vibes", "Segoe Script", cursive;
   --font-en-body: "Nunito", "Segoe UI", -apple-system, Arial, sans-serif;
-  --font-ar:      "Baloo Bhaijaan 2", "Segoe UI", Tahoma, sans-serif;
-  --font-ar-head: "El Messiri", "Baloo Bhaijaan 2", Tahoma, sans-serif;
+  --font-ar:      "IBM Plex Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+  --font-ar-head: "Aref Ruqaa", "IBM Plex Sans Arabic", Tahoma, sans-serif;
   --font-verse:   "Amiri", "Traditional Arabic", serif;
 
   --ease-soft: cubic-bezier(.25, .8, .35, 1);
@@ -42,7 +42,7 @@ body {
 }
 
 /* Language-aware font switching */
-html[lang="ar"] body { font-family: var(--font-ar); }
+html[lang="ar"] body { font-family: var(--font-ar); font-size: 1.08em; }
 
 h1, h2 { font-weight: 500; }
 html[lang="en"] h1,
@@ -325,20 +325,21 @@ html[lang="en"] .hero-eyebrow { text-transform: uppercase; font-size: .8rem; }
 
 /* Photo placeholder — swap in an <img> later, layout stays intact */
 .hero-photo {
-  width: clamp(120px, 34vw, 170px);
-  height: clamp(120px, 34vw, 170px);
+  width: 100%;
+  max-width: 340px;
   margin: 0 auto 1.8rem;
-  border-radius: 50%;
-  border: 1px solid var(--rose);
-  outline: 6px solid var(--blush-soft);
-  background: var(--white);
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
   color: var(--rose);
 }
-.hero-photo img { width: 100%; height: 100%; object-fit: cover; }
+.hero-photo img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
+}
 .hero-monogram { width: 58%; height: auto; opacity: .8; }
 
 .hero-names {
@@ -347,6 +348,7 @@ html[lang="en"] .hero-eyebrow { text-transform: uppercase; font-size: .8rem; }
   color: var(--ink);
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: .1em;
 }
 .hero-names .amp {
@@ -730,7 +732,6 @@ html[lang="en"] .footer-names { font-family: var(--font-en-head); font-size: 2.1
 
 /* ══════════════════════ LARGER SCREENS ══════════════════════ */
 @media (min-width: 640px) {
-  .hero-names { flex-direction: row; justify-content: center; align-items: baseline; gap: .45em; }
   .detail-row { flex-direction: row; align-items: baseline; justify-content: space-between; text-align: start; }
   .countdown { gap: 1rem; }
   .section { padding: 4.5rem 1.5rem; }
