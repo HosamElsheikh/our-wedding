@@ -83,14 +83,26 @@ body.env-locked { overflow: hidden; }
   transition: transform .95s cubic-bezier(.55, 0, .6, 1) .12s;
   will-change: transform;
 }
-/* subtle paper grain so the envelope reads as textured stock */
+/* paper texture, two layers:
+   ::before — large cloudy mottling (uneven paper tone)
+   ::after  — fine fiber grain */
+.env-half::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.011' numOctaves='4' seed='11' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E");
+  background-size: 600px 600px;
+  opacity: .45;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+}
 .env-half::after {
   content: "";
   position: absolute;
   inset: 0;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 240px 240px;
-  opacity: .08;
+  opacity: .14;
   mix-blend-mode: multiply;
   pointer-events: none;
 }
@@ -98,13 +110,13 @@ body.env-locked { overflow: hidden; }
 .env-half-a {
   background:
     linear-gradient(115deg, transparent 49.6%, rgba(255, 255, 255, .14) 50%, transparent 50.6%),
-    linear-gradient(170deg, #d998a2, #c9808d);
+    linear-gradient(170deg, #d494a0, #cd8492);
   clip-path: polygon(0 0, 100% 0, 100% 42%, 0 58%);
 }
 .env-half-b {
   background:
     linear-gradient(105deg, transparent 49.6%, rgba(146, 84, 93, .12) 50%, transparent 50.5%),
-    linear-gradient(160deg, #f7dade, #eec3c8);
+    linear-gradient(160deg, #f5d5da, #efc8cd);
   clip-path: polygon(0 58%, 100% 42%, 100% 100%, 0 100%);
 }
 /* white card sliver peeking along the split */
@@ -197,13 +209,13 @@ html[lang="ar"] .envelope-title { font-family: var(--font-ar-head); }
   .env-half-a {
     background:
       linear-gradient(25deg, transparent 49.6%, rgba(255, 255, 255, .14) 50%, transparent 50.6%),
-      linear-gradient(100deg, #d998a2, #c9808d);
+      linear-gradient(100deg, #d494a0, #cd8492);
     clip-path: polygon(0 0, 42% 0, 58% 100%, 0 100%);
   }
   .env-half-b {
     background:
       linear-gradient(15deg, transparent 49.6%, rgba(146, 84, 93, .12) 50%, transparent 50.5%),
-      linear-gradient(250deg, #f7dade, #eec3c8);
+      linear-gradient(250deg, #f5d5da, #efc8cd);
     clip-path: polygon(42% 0, 100% 0, 100% 100%, 58% 100%);
   }
   .env-lip { clip-path: polygon(42% 0, 44.5% 0, 60.5% 100%, 58% 100%); }
