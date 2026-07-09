@@ -194,17 +194,6 @@ html[lang="ar"] .envelope-title { font-family: var(--font-ar-head); }
     brightness(1.55) saturate(.45) hue-rotate(-6deg)
     drop-shadow(0 6px 14px rgba(146, 84, 93, .45));
 }
-/* embossed stamp design over the wax dish */
-.env-seal-stamp {
-  position: absolute;
-  top: 48%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 58%;
-  height: 58%;
-  color: rgba(255, 238, 240, .78);
-  filter: drop-shadow(0 1px 0 rgba(94, 44, 58, .55));
-}
 .envelope-full.open .env-seal {
   animation: none;
 }
@@ -212,12 +201,6 @@ html[lang="ar"] .envelope-title { font-family: var(--font-ar-head); }
   0%, 100% { transform: translate(-50%, -50%) scale(1); }
   50%      { transform: translate(-50%, -50%) scale(1.06); }
 }
-
-/* Monogram on the seal: Latin "H & Y" for English, a small Arabic
-   ح ي (Hossam & Yasmine's initials) for Arabic — only one shows at a time. */
-.seal-text-ar { display: none; }
-html[lang="ar"] .seal-text-ar { display: inline; }
-html[lang="ar"] .seal-text-en { display: none; }
 
 .envelope-hint {
   position: absolute;
