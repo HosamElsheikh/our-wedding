@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -158,6 +158,15 @@
       <div class="calendar hero-anim">
         <p class="calendar-title" data-en="Save the Date" data-ar="احفظوا التاريخ">احفظوا التاريخ</p>
         <p class="calendar-month" data-en="August 2026" data-ar="أغسطس 2026">أغسطس 2026</p>
+        <div class="calendar-weekdays" aria-hidden="true">
+          <span data-en="Sun" data-ar="أحد">أحد</span>
+          <span data-en="Mon" data-ar="اثنين">اثنين</span>
+          <span data-en="Tue" data-ar="ثلاثاء">ثلاثاء</span>
+          <span data-en="Wed" data-ar="أربعاء">أربعاء</span>
+          <span data-en="Thu" data-ar="خميس">خميس</span>
+          <span data-en="Fri" data-ar="جمعة">جمعة</span>
+          <span data-en="Sat" data-ar="سبت">سبت</span>
+        </div>
         <div class="calendar-grid" aria-label="August 2026">
           <span></span><span></span><span></span><span></span><span></span><span></span><span>1</span>
           <span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span class="wedding-day"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg><b>8</b></span>
@@ -213,6 +222,14 @@
         <span class="detail-value venue-name">Château M</span>
       </div>
 
+      <div class="venue-map">
+        <iframe
+          src="https://www.google.com/maps?q=30.215536,31.5335422&hl=en&z=16&output=embed"
+          width="100%" height="220" style="border:0" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Château M location"></iframe>
+      </div>
+
       <a class="btn btn-primary directions-btn" href="https://maps.app.goo.gl/8H8gwWQXovu6hcSq9" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M12 21s-7-6.1-7-11a7 7 0 1 1 14 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/>
@@ -255,7 +272,7 @@
     <svg class="divider" viewBox="0 0 300 40" aria-hidden="true"><use href="#floral-divider"/></svg>
     <p class="footer-thanks" data-en="We can't wait to celebrate with you" data-ar="بانتظار مشاركتكم لنا فرحتنا">بانتظار مشاركتكم لنا فرحتنا</p>
     <p class="footer-names">
-      <span data-en="Hosam &amp; Yasmine" data-ar="حسام وياسمين">حسام وياسمين</span>
+      <span class="name" data-en="Hosam &amp; Yasmine" data-ar="حسام وياسمين">حسام وياسمين</span>
       <span class="footer-date">08 · 08 · 2026</span>
     </p>
   </footer>

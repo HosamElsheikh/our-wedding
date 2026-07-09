@@ -50,7 +50,7 @@ const firebaseConfig = {
 
 /* ── Site constants ─────────────────────────────────────────────── */
 const WEDDING_DATE = new Date(2026, 7, 8, 18, 0, 0); // Aug 8, 2026, 6:00 PM (month is 0-indexed)
-const DEFAULT_LANG = "en";                            // change to "ar" if you prefer Arabic first
+const DEFAULT_LANG = "ar";                            // change to "en" if you prefer English first
 const MAX_COMMENT_LENGTH = 300;
 
 /* ════════════════════════════════════════════════════════════════════

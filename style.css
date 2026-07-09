@@ -4,6 +4,14 @@
    Mobile-first · RTL-aware (logical properties) · No frameworks
    ══════════════════════════════════════════════════════════════ */
 
+@font-face {
+  font-family: "Diwani Letter";
+  src: url("assets/fonts/DiwaniLetter.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --white:      #ffffff;
   --ivory:      #fdfaf7;
@@ -358,6 +366,12 @@ html[lang="en"] .hero-eyebrow { text-transform: uppercase; font-size: .8rem; }
   color: var(--rose-deep);
 }
 
+/* Decorative Diwani calligraphy for the couple's Arabic names only */
+html[lang="ar"] .hero-names .name,
+html[lang="ar"] .footer-names .name {
+  font-family: "Diwani Letter", var(--font-ar-head);
+}
+
 .hero-invite {
   margin-top: 1.4rem;
   font-size: 1.05rem;
@@ -389,8 +403,20 @@ html[lang="ar"] .calendar-title { font-family: var(--font-ar-head); font-size: 1
 }
 html[lang="en"] .calendar-month { text-transform: uppercase; letter-spacing: .22em; }
 html[lang="ar"] .calendar-month { letter-spacing: .06em; }
+.calendar-weekdays {
+  margin-top: .9rem;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  color: var(--rose-deep);
+  text-transform: uppercase;
+}
+.calendar-weekdays span { display: flex; align-items: center; justify-content: center; }
+html[lang="ar"] .calendar-weekdays { font-size: .78rem; text-transform: none; }
 .calendar-grid {
-  margin-top: .7rem;
+  margin-top: .3rem;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   row-gap: .15rem;
@@ -602,7 +628,14 @@ html[lang="ar"] .verse-translation { font-family: var(--font-en-body); }
 html[lang="en"] .detail-label { text-transform: uppercase; }
 .detail-value { font-size: 1.15rem; font-weight: 600; }
 .venue-name { font-family: var(--font-en-head); font-size: 1.7rem; letter-spacing: .02em; }
-.directions-btn { margin-top: 1.6rem; }
+.venue-map {
+  margin-top: 1.4rem;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+.venue-map iframe { display: block; }
+.directions-btn { margin-top: 1rem; }
 
 /* ══════════════════════ WISHES WALL ══════════════════════ */
 .wishes-sub { color: var(--ink-soft); margin-top: -1rem; margin-bottom: 1.8rem; font-size: .95rem; }
