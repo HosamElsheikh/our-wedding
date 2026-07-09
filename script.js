@@ -205,14 +205,14 @@ envelopeBtn.addEventListener("click", () => {
   // Start the music inside the tap gesture so no browser blocks it
   music.play().then(() => setMusicState(true)).catch(() => {});
 
-  // Seal breaks → the two halves slide apart while the hero animates
-  // in underneath → cleanup
-  setTimeout(() => document.body.classList.add("loaded"), 350);
+  // The flap lifts open in slow-motion 3D → the hero animates in
+  // underneath → the whole overlay fades away → cleanup
+  setTimeout(() => document.body.classList.add("loaded"), 500);
   setTimeout(() => {
     envelopeOverlay.classList.add("done");
     document.body.classList.remove("env-locked");
-  }, 1100);
-  setTimeout(() => envelopeOverlay.remove(), 1700);
+  }, 1650);
+  setTimeout(() => envelopeOverlay.remove(), 2300);
 });
 
 /* ════════════════════════════════════════════════════════════════════

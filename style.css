@@ -59,18 +59,19 @@ html[lang="ar"] h1,
 html[lang="ar"] h2 { font-family: var(--font-ar-head); font-weight: 600; }
 
 /* ══════════════════════ ENVELOPE SPLASH ══════════════════════
-   Full-screen diagonal envelope (Etsy-style): a light "paper" half
-   and a deep-rose "flap" half meet on a diagonal under a wax seal.
-   Tapping breaks the seal and the two halves slide apart, revealing
-   the invitation already sitting underneath. Portrait splits
-   top/bottom; landscape (web) splits left/right. */
+   Full-screen horizontal envelope (kept landscape-oriented in every
+   viewport, phone included): a light "paper" body with a deep-rose
+   triangular flap folded down from the top edge, sealed with a wax
+   stamp at its tip. Tapping lifts the flap open in 3D — hinged along
+   the top edge, tipping back like a lid — then the whole overlay
+   fades away to reveal the invitation underneath. */
 body.env-locked { overflow: hidden; }
 
 .envelope-overlay {
   position: fixed;
   inset: 0;
   z-index: 100;
-  transition: opacity .5s var(--ease-soft), visibility .5s;
+  transition: opacity .6s var(--ease-soft), visibility .6s;
 }
 .envelope-overlay.done { opacity: 0; visibility: hidden; pointer-events: none; }
 
@@ -84,13 +85,13 @@ body.env-locked { overflow: hidden; }
   padding: 0;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  perspective: 1400px;
 }
 
 .env-half {
   position: absolute;
   inset: 0;
   display: block;
-  transition: transform .95s cubic-bezier(.55, 0, .6, 1) .12s;
   will-change: transform;
 }
 /* linen paper texture, two layers:
@@ -118,18 +119,17 @@ body.env-locked { overflow: hidden; }
   mix-blend-mode: multiply;
   pointer-events: none;
 }
-/* Portrait (mobile): diagonal split, top piece + bottom piece */
-/* Envelope back, like a real folded envelope:
-   half-a = the triangular flap lying ON TOP, casting a shadow
+/* Envelope back, like a real folded envelope, always landscape-oriented:
+   half-a = the triangular flap folded down from the top edge, hinged
+   along that edge so it can swing open in 3D like a lid.
    half-b = the envelope body with creases radiating from the center.
-   The body has a notch cut where the flap sits (with a small overlap
-   band along the edge), so the moment the two pieces start separating
-   the invitation page shows through the gap — not more envelope.
-   Default layout (web/tablet): flap on top, opens VERTICALLY. */
+   The body has a notch cut where the flap sits, so the moment the
+   flap lifts away the invitation page shows through the gap. */
 .env-half-a {
   background: linear-gradient(180deg, #dfa8b2, #d795a1);
   clip-path: polygon(0 0, 100% 0, 50% 52%);
   filter: drop-shadow(0 10px 18px rgba(122, 62, 74, .45));
+  backface-visibility: hidden;
 }
 .env-half-b {
   background:
@@ -137,9 +137,26 @@ body.env-locked { overflow: hidden; }
     linear-gradient(-63deg, transparent 49.5%, rgba(122, 62, 74, .22) 49.9%, rgba(255, 255, 255, .3) 50.15%, transparent 50.6%),
     linear-gradient(165deg, #f0cad0, #e9bec5);
   clip-path: polygon(0 0, 50% 46%, 100% 0, 100% 100%, 0 100%);
+  transition: opacity .6s ease .9s;
 }
-.envelope-full.open .env-half-a { transform: translate3d(0, -114%, 0); }
-.envelope-full.open .env-half-b { transform: translate3d(0, 114%, 0); }
+/* Once the flap has lifted clear, the body fades away together with
+   it — the whole envelope dissolves as one, not just the flap. */
+.envelope-full.open .env-half-b { opacity: 0; }
+
+/* Wraps the flap + seal so they lift together, hinged along the top
+   edge, tipping back in 3D like a lid — instead of tearing apart. */
+.env-flap-group {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 0%;
+  transform-style: preserve-3d;
+  transition: transform 1.5s cubic-bezier(.61, .04, .3, 1), opacity .5s ease .9s;
+  will-change: transform;
+}
+.envelope-full.open .env-flap-group {
+  transform: translateZ(40px) rotateX(-155deg);
+  opacity: 0;
+}
 
 .envelope-title {
   position: absolute;
@@ -189,14 +206,18 @@ html[lang="ar"] .envelope-title { font-family: var(--font-ar-head); }
   filter: drop-shadow(0 1px 0 rgba(94, 44, 58, .55));
 }
 .envelope-full.open .env-seal {
-  opacity: 0;
-  transform: translate(-50%, -50%) scale(1.3);
   animation: none;
 }
 @keyframes seal-pulse {
   0%, 100% { transform: translate(-50%, -50%) scale(1); }
   50%      { transform: translate(-50%, -50%) scale(1.06); }
 }
+
+/* Monogram on the seal: Latin "H & Y" for English, a small Arabic
+   ح ي (Hossam & Yasmine's initials) for Arabic — only one shows at a time. */
+.seal-text-ar { display: none; }
+html[lang="ar"] .seal-text-ar { display: inline; }
+html[lang="ar"] .seal-text-en { display: none; }
 
 .envelope-hint {
   position: absolute;
@@ -216,32 +237,16 @@ html[lang="ar"] .envelope-title { font-family: var(--font-ar-head); }
   50%      { opacity: 1; }
 }
 
-/* Phones: flap on the side, opens HORIZONTALLY */
+/* Phones: same horizontal, top-hinged flap layout as web — just a
+   smaller seal so it doesn't crowd a narrow screen. */
 @media (max-width: 640px) {
-  .env-half-a {
-    background: linear-gradient(90deg, #dfa8b2, #d795a1);
-    clip-path: polygon(0 0, 55% 50%, 0 100%);
-    filter: drop-shadow(12px 0 18px rgba(122, 62, 74, .45));
-  }
-  .env-half-b {
-    background:
-      linear-gradient(27deg,  transparent 49.5%, rgba(122, 62, 74, .22) 49.9%, rgba(255, 255, 255, .3) 50.15%, transparent 50.6%),
-      linear-gradient(-27deg, transparent 49.5%, rgba(122, 62, 74, .22) 49.9%, rgba(255, 255, 255, .3) 50.15%, transparent 50.6%),
-      linear-gradient(255deg, #f0cad0, #e9bec5);
-    clip-path: polygon(0 0, 49% 50%, 0 100%, 100% 100%, 100% 0);
-  }
-  .env-seal { top: 50%; left: 55%; }
-  .envelope-full.open .env-half-a { transform: translate3d(-114%, 0, 0); }
-  .envelope-full.open .env-half-b { transform: translate3d(114%, 0, 0); }
-  /* keep the texts clear of the side flap */
-  .envelope-title { top: 8%; left: 18%; right: 4%; }
-  .envelope-hint  { bottom: 7%; left: 18%; right: 4%; }
+  .env-seal { width: 108px; height: 108px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .env-seal { animation: none; }
   .envelope-hint { animation: none; opacity: 1; }
-  .env-half { transition: none; }
+  .env-flap-group { transition: none; }
 }
 
 /* ── Language toggle ─────────────────────────────────────────── */
