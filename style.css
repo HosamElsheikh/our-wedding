@@ -617,12 +617,14 @@ html[lang="en"] .detail-label { text-transform: uppercase; }
 .detail-value { font-size: 1.15rem; font-weight: 600; }
 .venue-name { font-family: var(--font-en-head); font-size: 1.7rem; letter-spacing: .02em; }
 .venue-map {
+  display: block;
   margin-top: 1.4rem;
-  border-radius: 14px;
+  border-radius: 20px;
   overflow: hidden;
-  border: 1px solid var(--line);
+  transition: transform .25s var(--ease-soft), box-shadow .25s var(--ease-soft);
 }
-.venue-map iframe { display: block; }
+.venue-map:hover { transform: scale(1.015); box-shadow: 0 8px 22px rgba(198, 127, 138, .18); }
+.venue-map-art { display: block; width: 100%; height: auto; }
 .directions-btn { margin-top: 1rem; }
 
 /* ══════════════════════ WISHES WALL ══════════════════════ */

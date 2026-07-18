@@ -53,11 +53,40 @@ const WEDDING_DATE = new Date(2026, 7, 8, 18, 0, 0); // Aug 8, 2026, 6:00 PM (mo
 const DEFAULT_LANG = "ar";                            // change to "en" if you prefer English first
 const MAX_COMMENT_LENGTH = 300;
 
+/* ── Arabic-Indic digit helper (٠-٩) ─────────────────────────────── */
+const ARABIC_DIGITS = ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"];
+function toArabicDigits(str) {
+  return String(str).replace(/[0-9]/g, (d) => ARABIC_DIGITS[+d]);
+}
+function localizeDigits(str, lang) {
+  return lang === "ar" ? toArabicDigits(str) : str;
+}
+
 /* ════════════════════════════════════════════════════════════════════
    1 · LANGUAGE TOGGLE  (EN ↔ AR, swaps dir attribute for RTL)
    ════════════════════════════════════════════════════════════════════ */
 const langToggle = document.getElementById("langToggle");
 let currentLang = localStorage.getItem("weddingLang") || DEFAULT_LANG;
+
+// Elements whose text is pure digits (calendar days, the wedding-day
+// marker, the footer date) — cache their original Latin-digit text once
+// so we can always re-derive the Arabic version from the source of truth
+// instead of re-converting an already-converted string.
+function numericElements() {
+  const els = [];
+  document.querySelectorAll(".calendar-grid > span").forEach((span) => {
+    if (span.classList.contains("wedding-day")) {
+      const b = span.querySelector("b");
+      if (b) els.push(b);
+    } else {
+      const raw = span.dataset.numLatin ?? span.textContent.trim();
+      if (/^[0-9]+$/.test(raw)) els.push(span);
+    }
+  });
+  const footerDate = document.querySelector(".footer-date");
+  if (footerDate) els.push(footerDate);
+  return els;
+}
 
 function applyLanguage(lang) {
   currentLang = lang;
@@ -76,6 +105,13 @@ function applyLanguage(lang) {
     el.placeholder = lang === "ar" ? el.dataset.arPlaceholder : el.dataset.enPlaceholder;
   });
 
+  numericElements().forEach((el) => {
+    if (!el.dataset.numLatin) el.dataset.numLatin = el.textContent;
+    el.textContent = localizeDigits(el.dataset.numLatin, lang);
+  });
+
+  updateCharCount();
+  updateCountdown();
   renderWishes(); // re-render timestamps in the new locale
 }
 
@@ -117,14 +153,14 @@ const cd = {
 };
 
 function pad(n) {
-  return String(n).padStart(2, "0");
+  return localizeDigits(String(n).padStart(2, "0"), currentLang);
 }
 
 function updateCountdown() {
   const diff = WEDDING_DATE - Date.now();
 
   if (diff <= 0) {
-    cd.days.textContent = cd.hours.textContent = cd.mins.textContent = cd.secs.textContent = "00";
+    cd.days.textContent = cd.hours.textContent = cd.mins.textContent = cd.secs.textContent = pad(0);
     cd.done.hidden = false;
     clearInterval(countdownTimer);
     return;
@@ -281,20 +317,24 @@ function renderWishes() {
 
     const name = document.createElement("span");
     name.className = "wish-card-name";
-    name.textContent = w.name; // textContent = safe, no HTML injection
+    name.textContent = localizeDigits(w.name, currentLang); // textContent = safe, no HTML injection
 
     const time = document.createElement("span");
     time.className = "wish-card-time";
     if (w.createdAt && typeof w.createdAt.toDate === "function") {
-      time.textContent = w.createdAt.toDate().toLocaleDateString(locale, {
+      const formatted = w.createdAt.toDate().toLocaleDateString(locale, {
         day: "numeric",
         month: "short",
       });
+      // Some browsers format the "ar" locale with plain Latin digits —
+      // force Arabic-Indic digits ourselves so it always matches the
+      // rest of the page instead of depending on ICU data per-browser.
+      time.textContent = localizeDigits(formatted, currentLang);
     }
 
     const text = document.createElement("p");
     text.className = "wish-card-text";
-    text.textContent = w.text;
+    text.textContent = localizeDigits(w.text, currentLang);
 
     head.append(name, time);
     card.append(head, text);
@@ -303,9 +343,10 @@ function renderWishes() {
 }
 
 // Live character counter
-wishText.addEventListener("input", () => {
-  charCount.textContent = `${wishText.value.length} / ${MAX_COMMENT_LENGTH}`;
-});
+function updateCharCount() {
+  charCount.textContent = localizeDigits(`${wishText.value.length} / ${MAX_COMMENT_LENGTH}`, currentLang);
+}
+wishText.addEventListener("input", updateCharCount);
 
 wishForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -331,7 +372,7 @@ wishForm.addEventListener("submit", async (e) => {
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     });
     wishForm.reset();
-    charCount.textContent = `0 / ${MAX_COMMENT_LENGTH}`;
+    updateCharCount();
     setStatus("Thank you! Your wish means a lot to us 🌸", "شكراً لكم! دعواتكم تعني لنا الكثير 🌸");
   } catch (err) {
     console.error("Failed to post wish:", err);
